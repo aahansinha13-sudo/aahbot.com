@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aahbot</title>
+    <style>
+        :root {
+            --bg-color: rgb(19, 20, 36);
+            --text-color: white;
+            --accent-color: aqua;
+            --border-color: rgb(37, 255, 255);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 70px;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+        }
+
+        .nav-links {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .user-greeting {
+            font-size: 16px;
+            color: var(--accent-color);
+            opacity: 0.85;
+        }
+
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            border: 2px solid rgba(255, 80, 80, 0.5);
+            border-radius: 10px;
+            padding: 8px 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 0 8px rgba(255, 80, 80, 0.15);
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255, 80, 80, 0.12);
+            box-shadow: 0 0 14px rgba(255, 80, 80, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .payment-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 18px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 0 10px rgba(37, 255, 255, 0.25);
+            z-index: 1000;
+        }
+
+        .payment-link:hover {
+            background-color: rgba(37, 255, 255, 0.15);
+            box-shadow: 0 0 16px rgba(37, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        p {
+            text-align: center;
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .logo-img {
+            max-width: 320px;
+            height: auto;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(37, 255, 255, 0.4));
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 800px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        input {
+            text-align: center;
+            font-family: inherit;
+            color: var(--text-color);
+            font-size: 20px;
+            padding: 12px;
+            flex: 1;
+            min-width: 280px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+        }
+
+        button, select {
+            font-family: inherit;
+            color: var(--text-color);
+            font-size: 20px;
+            padding: 12px 24px;
+            background-color: var(--bg-color);
+            border-radius: 10px;
+            border-color: var(--border-color);
+            border-style: solid;
+            border-width: 2px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: rgba(37, 255, 255, 0.1);
+        }
+
+        #response {
+            margin-top: 20px;
+            font-size: 20px;
+            text-align: left;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 3px solid rgba(37, 255, 255, 0.3);
+            color: var(--accent-color);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        hr {
+            border-color: aqua;
+            height: 2px;
+            border-width: 2px;
+            border-radius: 10px;
+            width: 80%;
+        }
+
+        footer {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000000;
+            color: #f9faf9;
+            text-align: center;
+            font-size: 16px;
+            width: 100%;         
+            padding: 15px 0;    
+            position: fixed;     
+            bottom: 0;           
+            left: 0;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-links">
+        <span class="user-greeting" id="userGreeting"></span>
+        <button class="logout-btn" id="logoutBtn" title="Log out">🚪 Logout</button>
+    </div>
+    <a href="payment.html" class="payment-link" id="paymentBtn" title="Go to Payment Page">💳 Payment</a>
+    <div class="logo-container">
+        <img src="logo.png" alt="Aahbot Logo" class="logo-img">
+    </div>
+    <hr>
+    <p>The mic is yours</p>
+    <br>
+    <br>
+     <div id="response"></div>
+     <br>
+     <br>
+    <div class="input-container">
+        <input type="text" id="userInput" placeholder="ask me plz">
+        <button id="submitBtn">Submit</button>
+        <button id="resetBtn">Reset</button>
+    </div>
+    <div>
+        <select name="API Selector" id="APIS">
+            <option value="gemini-3.8-flash">fast(Free)</option>
+            <option value="gemini-3.5-flash-lite">Thinking(Paid)</option>
+        </select>
+    </div>
+
+    <div><select name="Color Mode" id="bgfontstyle">
+            <option value="Dark Mode"> Dark Mode </option>
+            <option value="Light Mode"> Light Mode </option>
+        </select>
+    </div>
+
+    <script src="auth.js"></script>
+
+    <script>
+        const currentUser = Auth.getCurrentUser();
+        if (!currentUser) {
+            window.location.href = "login.html";
+        } else {
+            const badge = currentUser.premium ? " ⭐ [Premium]" : (currentUser.isGuest ? " 🕶️ [Guest]" : "");
+            document.getElementById("userGreeting").textContent = "👋 " + currentUser.username + badge;
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            Auth.logout();
+            window.location.href = "login.html";
+        });
+
+        const inputField = document.getElementById("userInput");
+        const submitBtn = document.getElementById("submitBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const responseDiv = document.getElementById("response");
+        const themeSelector = document.getElementById("bgfontstyle");
+        const apiSelector = document.getElementById("APIS");
+
+        async function handleSubmission() {
+            const prompt = inputField.value.trim();
+            if (!prompt) return;
+
+            const selectedModel = apiSelector.value; 
+            const selectedText = apiSelector.options[apiSelector.selectedIndex].text;
+            responseDiv.textContent = `Aahbot is thinking using ${selectedText}...`;
+
+            try {
+                const currentUser = Auth.getCurrentUser();
+                const username = currentUser ? currentUser.username : "Guest";
+
+                const response = await fetch("/api/gemini", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "x-username": username
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        model: selectedModel,
+                        username: username
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.status === 403) {
+                    responseDiv.textContent = data.error?.message || "🔒 Access Denied: Thinking model requires a Premium Pass.";
+                    return;
+                }
+
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0].text) {
+                    responseDiv.textContent = data.candidates[0].content.parts[0].text;
+                } else if (data.error) {
+                    responseDiv.textContent = "API Error: " + data.error.message;
+                } else {
+                    responseDiv.textContent = "Received an empty response from Gemini API.";
+                }
+
+            } catch (error) {
+                console.error("Gemini API fetch error:", error);
+                responseDiv.textContent = "An error occurred while contacting the server. Check your connection.";
+            }
+        }
+
+        function handleReset() {
+            inputField.value = "";
+            responseDiv.textContent = "";
+        }
+
+        function changeTheme() {
+            const selectedTheme = themeSelector.value;
+            const root = document.documentElement;
+
+            if (selectedTheme === "Light Mode") {
+                root.style.setProperty('--bg-color', 'rgb(240, 240, 245)');
+                root.style.setProperty('--text-color', 'rgb(20, 20, 30)');
+                root.style.setProperty('--accent-color', 'rgb(0, 110, 200)');
+                root.style.setProperty('--border-color', 'rgb(0, 110, 200)');
+            } else {
+                root.style.setProperty('--bg-color', 'rgb(19, 20, 36)');
+                root.style.setProperty('--text-color', 'white');
+                root.style.setProperty('--accent-color', 'aqua');
+                root.style.setProperty('--border-color', 'rgb(37, 255, 255)');
+            }
+        }
+
+        submitBtn.addEventListener("click", handleSubmission);
+        resetBtn.addEventListener("click", handleReset);
+        themeSelector.addEventListener("change", changeTheme);
+
+        inputField.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                handleSubmission();
+            }
+        });
+    </script>
+</body>
+<footer>Aahan Sinha 7C Aah universe&trade; Copyrights Reserved Aah is a reserved trademark of AS Group&trade;</footer>
+</html>

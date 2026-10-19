@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aahbot - Payments & Premium</title>
+    <style>
+        :root {
+            --bg-color: rgb(19, 20, 36);
+            --text-color: white;
+            --accent-color: aqua;
+            --border-color: rgb(37, 255, 255);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 70px;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 18px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            box-shadow: 0 0 10px rgba(37, 255, 255, 0.25);
+            z-index: 1000;
+        }
+
+        .back-link:hover {
+            background-color: rgba(37, 255, 255, 0.15);
+            box-shadow: 0 0 16px rgba(37, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .back-link:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .back-link {
+                top: 12px;
+                left: 12px;
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .logo-img {
+            max-width: 300px;
+            height: auto;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(37, 255, 255, 0.4));
+        }
+
+        h1 {
+            color: var(--accent-color);
+            text-shadow: 0 0 12px rgba(37, 255, 255, 0.4);
+            margin-bottom: 8px;
+        }
+
+        hr {
+            border-color: aqua;
+            height: 2px;
+            border-width: 2px;
+            border-radius: 10px;
+            width: 80%;
+            margin-bottom: 25px;
+        }
+
+        /* ─── Status banner ──────────────────────────────── */
+        .user-status-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(37, 255, 255, 0.35);
+            border-radius: 12px;
+            padding: 16px 24px;
+            max-width: 520px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 0 16px rgba(37, 255, 255, 0.1);
+        }
+
+        .user-status-card h3 {
+            margin: 0 0 8px 0;
+            color: var(--accent-color);
+            font-size: 18px;
+        }
+
+        .badge-premium {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        .badge-standard {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+
+        /* ─── Redeem Card ────────────────────────────────── */
+        .redeem-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 24px;
+            max-width: 520px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(37, 255, 255, 0.12);
+        }
+
+        .redeem-card h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+            font-size: 20px;
+        }
+
+        .redeem-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .redeem-input {
+            flex: 1;
+            min-width: 200px;
+            font-family: inherit;
+            color: var(--text-color);
+            font-size: 16px;
+            padding: 10px 14px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-transform: uppercase;
+            text-align: center;
+            outline: none;
+        }
+
+        .redeem-btn {
+            font-family: inherit;
+            color: var(--bg-color);
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-color), rgb(0, 180, 220));
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+        }
+
+        .redeem-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 16px rgba(37, 255, 255, 0.5);
+        }
+
+        .sample-passes {
+            margin-top: 15px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .pass-chip {
+            display: inline-block;
+            background: rgba(37, 255, 255, 0.1);
+            border: 1px solid rgba(37, 255, 255, 0.3);
+            border-radius: 6px;
+            padding: 4px 8px;
+            margin: 4px;
+            cursor: pointer;
+            color: var(--accent-color);
+            transition: all 0.2s;
+        }
+
+        .pass-chip:hover {
+            background: rgba(37, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        .redeem-message {
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .redeem-message.success {
+            display: block;
+            background: rgba(37, 255, 180, 0.15);
+            border: 1px solid rgba(37, 255, 180, 0.4);
+            color: #25ffb4;
+        }
+
+        .redeem-message.error {
+            display: block;
+            background: rgba(255, 60, 60, 0.15);
+            border: 1px solid rgba(255, 60, 60, 0.4);
+            color: #ff6b6b;
+        }
+
+        /* ─── UPI Section ────────────────────────────────── */
+        .upi-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(37, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 520px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .upi-card h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        .upi-qr-placeholder {
+            width: 180px;
+            height: 180px;
+            margin: 15px auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(37, 255, 255, 0.4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .upi-text {
+            font-size: 16px;
+            color: var(--accent-color);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 14px;
+            border-radius: 6px;
+            display: inline-block;
+            user-select: all;
+        }
+
+        footer {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000000;
+            color: #f9faf9;
+            text-align: center;
+            font-size: 16px;
+            width: 100%;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="back-link" id="backBtn" title="Back to Chat">← Back to Chat</a>
+    <div class="logo-container">
+        <img src="logo.png" alt="Aahbot Logo" class="logo-img">
+    </div>
+    <h1>Payments & Premium</h1>
+    <hr>
+
+    <!-- Account Status from Local JSON -->
+    <div class="user-status-card" id="userStatusCard">
+        <h3>Account Overview</h3>
+        <div>
+            User: <strong id="currentUsername">Checking...</strong>
+            <span id="currentTierBadge" class="badge-standard">Standard</span>
+        </div>
+    </div>
+
+    <!-- Redeem Pass Code (Stored in JSON) -->
+    <div class="redeem-card">
+        <h2>🎟️ Redeem Premium Pass</h2>
+        <p style="font-size: 14px; margin: 0; opacity: 0.8;">
+            Enter a pass code to upgrade your account to Premium in the local JSON database:
+        </p>
+        <div class="redeem-input-group">
+            <input type="text" id="passInput" class="redeem-input" placeholder="Pass Code">
+            <button type="button" id="redeemBtn" class="redeem-btn">Redeem Code</button>
+        </div>
+        <div class="redeem-message" id="redeemMsg"></div>
+        </div>
+    </div>
+
+    <!-- UPI Info -->
+    <div class="upi-card">
+        <h2>💳 UPI Payment Support</h2>
+        <div class="upi-qr-placeholder">
+            <span style="font-size: 32px; margin-bottom: 8px;">📲</span>
+            <span>Scan to Pay UPI</span>
+        </div>
+        <p>UPI ID: <span class="upi-text">aahansinha13@gmail.com</span></p>
+    </div>
+
+    <footer>Aahan Sinha 7C AS Group&trade; Copyrights Reserved Aah is a reserved trademark of AS Group&trade;</footer>
+
+    <!-- Load Local JSON Auth System -->
+    <script src="auth.js"></script>
+
+    <script>
+        const usernameSpan = document.getElementById("currentUsername");
+        const tierBadge = document.getElementById("currentTierBadge");
+        const passInput = document.getElementById("passInput");
+        const redeemBtn = document.getElementById("redeemBtn");
+        const redeemMsg = document.getElementById("redeemMsg");
+
+        function refreshUserStatus() {
+            const user = Auth.getCurrentUser();
+            if (!user) {
+                usernameSpan.textContent = "Not logged in";
+                tierBadge.textContent = "Guest";
+                tierBadge.className = "badge-standard";
+            } else {
+                usernameSpan.textContent = user.username + (user.isGuest ? " (Guest)" : "");
+                if (user.premium) {
+                    tierBadge.textContent = "⭐ Premium Member";
+                    tierBadge.className = "badge-premium";
+                } else {
+                    tierBadge.textContent = "Standard Free";
+                    tierBadge.className = "badge-standard";
+                }
+            }
+        }
+
+        refreshUserStatus();
+
+        function fillPass(code) {
+            passInput.value = code;
+        }
+
+        redeemBtn.addEventListener("click", () => {
+            const code = passInput.value.trim();
+            redeemMsg.style.display = "none";
+
+            if (!code) {
+                redeemMsg.textContent = "Please enter a pass code.";
+                redeemMsg.className = "redeem-message error";
+                return;
+            }
+
+            const result = Auth.activatePremium(code);
+            if (result.success) {
+                redeemMsg.textContent = result.message;
+                redeemMsg.className = "redeem-message success";
+                passInput.value = "";
+                refreshUserStatus();
+            } else {
+                redeemMsg.textContent = result.message;
+                redeemMsg.className = "redeem-message error";
+            }
+        });
+    </script>
+</body>
+</html>

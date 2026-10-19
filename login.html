@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aahbot - Login / Sign Up</title>
+    <style>
+        :root {
+            --bg-color: rgb(19, 20, 36);
+            --text-color: white;
+            --accent-color: aqua;
+            --border-color: rgb(37, 255, 255);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 70px;
+            box-sizing: border-box;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .logo-img {
+            max-width: 320px;
+            height: auto;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(37, 255, 255, 0.4));
+        }
+
+        hr {
+            border-color: aqua;
+            height: 2px;
+            border-width: 2px;
+            border-radius: 10px;
+            width: 80%;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+            text-shadow: 0 0 12px rgba(37, 255, 255, 0.4);
+        }
+
+        /* ─── Auth Card ─────────────────────────────────── */
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(37, 255, 255, 0.3);
+            border-radius: 14px;
+            box-shadow: 0 0 20px rgba(37, 255, 255, 0.08);
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .auth-card .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .auth-card label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .auth-card input {
+            width: 100%;
+            font-family: inherit;
+            color: var(--text-color);
+            font-size: 18px;
+            padding: 12px 14px;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            box-sizing: border-box;
+            transition: box-shadow 0.2s;
+        }
+
+        .auth-card input:focus {
+            box-shadow: 0 0 12px rgba(37, 255, 255, 0.3);
+        }
+
+        .auth-card input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ─── Password toggle ───────────────────────────── */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .toggle-password:hover {
+            opacity: 1;
+            background: none;
+        }
+
+        /* ─── Buttons ───────────────────────────────────── */
+        .auth-btn {
+            width: 100%;
+            font-family: inherit;
+            color: var(--bg-color);
+            font-size: 20px;
+            font-weight: bold;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--accent-color), rgb(0, 180, 220));
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+            box-shadow: 0 0 14px rgba(37, 255, 255, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 22px rgba(37, 255, 255, 0.5);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ─── Guest Mode Button ──────────────────────────── */
+        .guest-btn {
+            width: 100%;
+            margin-top: 12px;
+            font-family: inherit;
+            color: var(--text-color);
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 20px;
+            background-color: transparent;
+            border: 2px dashed rgba(37, 255, 255, 0.5);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-sizing: border-box;
+        }
+
+        .guest-btn:hover {
+            background-color: rgba(37, 255, 255, 0.1);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 14px rgba(37, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ─── Mode toggle (login ↔ register) ────────────── */
+        .mode-toggle {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .mode-toggle a {
+            color: var(--accent-color);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: text-shadow 0.2s;
+        }
+
+        .mode-toggle a:hover {
+            text-shadow: 0 0 10px rgba(37, 255, 255, 0.5);
+        }
+
+        /* ─── Feedback message ──────────────────────────── */
+        .message {
+            margin-top: 14px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.error {
+            display: block;
+            background-color: rgba(255, 60, 60, 0.15);
+            border: 1px solid rgba(255, 60, 60, 0.4);
+            color: #ff6b6b;
+        }
+
+        .message.success {
+            display: block;
+            background-color: rgba(37, 255, 180, 0.12);
+            border: 1px solid rgba(37, 255, 180, 0.35);
+            color: #25ffb4;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── Loading spinner ───────────────────────────── */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(19, 20, 36, 0.3);
+            border-top-color: var(--bg-color);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ─── Footer ────────────────────────────────────── */
+        footer {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000000;
+            color: #f9faf9;
+            text-align: center;
+            font-size: 16px;
+            width: 100%;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="logo.png" alt="Aahbot Logo" class="logo-img">
+    </div>
+    <hr>
+    <h1 id="formTitle">Sign In</h1>
+
+    <div class="auth-card">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter your username" autocomplete="username">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+                <button type="button" class="toggle-password" id="togglePassword" title="Show password">👁</button>
+            </div>
+        </div>
+
+        <!-- Confirm password field (only visible in register mode) -->
+        <div class="form-group" id="confirmGroup" style="display: none;">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="confirmPassword" placeholder="Re-enter your password" autocomplete="new-password">
+            </div>
+        </div>
+
+        <button class="auth-btn" id="authBtn">Sign In</button>
+
+        <button type="button" class="guest-btn" id="guestBtn" title="Continue without account">
+            🕶️ Continue in Guest Mode
+        </button>
+
+        <div class="message" id="message"></div>
+
+        <div class="mode-toggle">
+            <span id="toggleText">Don't have an account?</span>
+            <a id="toggleLink" href="javascript:void(0)" onclick="toggleMode()">Create Account</a>
+        </div>
+    </div>
+
+    <footer>Aahan Sinha 7C AS Group&trade; Copyrights Reserved Aah is a reserved trademark of AS Group&trade;</footer>
+
+    <!-- Load Local JSON Auth System -->
+    <script src="auth.js"></script>
+
+    <script>
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const confirmGroup = document.getElementById("confirmGroup");
+        const authBtn = document.getElementById("authBtn");
+        const guestBtn = document.getElementById("guestBtn");
+        const formTitle = document.getElementById("formTitle");
+        const toggleText = document.getElementById("toggleText");
+        const toggleLink = document.getElementById("toggleLink");
+        const messageDiv = document.getElementById("message");
+        const togglePasswordBtn = document.getElementById("togglePassword");
+
+        let isLoginMode = true;
+
+        // ─── Toggle password visibility ─────────────────────
+        if (togglePasswordBtn && passwordInput) {
+            togglePasswordBtn.addEventListener("click", () => {
+                const type = passwordInput.type === "password" ? "text" : "password";
+                passwordInput.type = type;
+                togglePasswordBtn.textContent = type === "password" ? "👁" : "🙈";
+            });
+        }
+
+        // ─── Toggle between login / sign up ─────────────────
+        function toggleMode() {
+            isLoginMode = !isLoginMode;
+            clearMessage();
+
+            if (isLoginMode) {
+                formTitle.textContent = "Sign In";
+                authBtn.textContent = "Sign In";
+                toggleText.textContent = "Don't have an account?";
+                toggleLink.textContent = "Create Account";
+                confirmGroup.style.display = "none";
+                passwordInput.autocomplete = "current-password";
+            } else {
+                formTitle.textContent = "Sign Up";
+                authBtn.textContent = "Create Account";
+                toggleText.textContent = "Already have an account?";
+                toggleLink.textContent = "Sign In";
+                confirmGroup.style.display = "block";
+                passwordInput.autocomplete = "new-password";
+            }
+        }
+
+        // ─── Show / Clear message ───────────────────────────
+        function showMessage(text, type) {
+            if (!messageDiv) return;
+            messageDiv.textContent = text;
+            messageDiv.className = "message " + type;
+        }
+
+        function clearMessage() {
+            if (!messageDiv) return;
+            messageDiv.textContent = "";
+            messageDiv.className = "message";
+        }
+
+        // ─── Submit handler using Local JSON ────────────────
+        async function handleAuth() {
+            const username = usernameInput ? usernameInput.value.trim() : "";
+            const password = passwordInput ? passwordInput.value : "";
+            clearMessage();
+
+            if (!username || !password) {
+                showMessage("Please fill in all fields.", "error");
+                return;
+            }
+
+            // ─── Registration mode ──────────────────────────
+            if (!isLoginMode) {
+                const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : "";
+                if (password !== confirmPassword) {
+                    showMessage("Passwords do not match.", "error");
+                    return;
+                }
+
+                authBtn.disabled = true;
+                authBtn.innerHTML = '<span class="spinner"></span>Creating account...';
+
+                try {
+                    const response = await fetch("/api/register", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password })
+                    });
+                    const result = await response.json();
+                    authBtn.disabled = false;
+                    authBtn.textContent = "Create Account";
+
+                    if (response.ok) {
+                        Auth.setCurrentUser({ username: result.username, premium: result.premium, isGuest: false });
+                        showMessage("🎉 " + result.message + " Redirecting...", "success");
+                        window.location.href = "/index.html";
+                    } else {
+                        showMessage(result.error || "Could not create account.", "error");
+                    }
+                } catch (error) {
+                    authBtn.disabled = false;
+                    authBtn.textContent = "Create Account";
+                    showMessage("Could not contact the server. Make sure the app is running.", "error");
+                }
+            } 
+            // ─── Login mode ─────────────────────────────────
+            else {
+                authBtn.disabled = true;
+                authBtn.innerHTML = '<span class="spinner"></span>Signing in...';
+
+                try {
+                    const response = await fetch("/api/login", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username, password })
+                    });
+                    const result = await response.json();
+                    authBtn.disabled = false;
+                    authBtn.textContent = "Sign In";
+
+                    if (response.ok) {
+                        Auth.setCurrentUser({ username: result.username, premium: result.premium, isGuest: false });
+                        showMessage("✅ " + result.message + " Redirecting...", "success");
+                        window.location.href = "/index.html";
+                    } else {
+                        showMessage(result.error || "Invalid username or password.", "error");
+                    }
+                } catch (error) {
+                    authBtn.disabled = false;
+                    authBtn.textContent = "Sign In";
+                    showMessage("Could not contact the server. Make sure the app is running.", "error");
+                }
+            }
+        }
+
+        // ─── Guest Mode Handler ─────────────────────────────
+        if (guestBtn) {
+            guestBtn.addEventListener("click", () => {
+                Auth.loginAsGuest();
+                showMessage("Entering Guest Mode...", "success");
+                setTimeout(() => {
+                    window.location.href = "guest.html";
+                }, 300);
+            });
+        }
+
+        // ─── Event listeners ────────────────────────────────
+        if (authBtn) {
+            authBtn.addEventListener("click", handleAuth);
+        }
+
+        // Submit on Enter key
+        [usernameInput, passwordInput, confirmPasswordInput].forEach(input => {
+            if (input) {
+                input.addEventListener("keypress", (e) => {
+                    if (e.key === "Enter") handleAuth();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

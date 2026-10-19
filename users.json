@@ -1,0 +1,44 @@
+[
+  {
+    "username": "admin",
+    "password": "123",
+    "premium": true,
+    "createdAt": "2026-10-18T12:00:00.000Z"
+  },
+  {
+    "username": "Aahan Sinha",
+    "password": "Aaxan Sixha",
+    "premium": true,
+    "createdAt": "2026-10-18T12:00:00.000Z"
+  },
+  {
+    "username": "Nishant Sinha",
+    "password": "nishant.",
+    "premium": true,
+    "createdAt": "2026-10-18T12:00:00.000Z"
+  },
+  {
+    "username": "Abir Rastogi",
+    "password": "1234",
+    "premium": false,
+    "createdAt": "2026-10-18T12:00:00.000Z"
+  },
+  {
+    "username": "Aaryan Ahuluwalia",
+    "password": "1234",
+    "premium": false,
+    "createdAt": "2026-10-18T12:00:00.000Z"
+  },
+  {
+    "username": "Avi Gupta",
+    "password": "1234",
+    "premium": true,
+    "createdAt": "2026-10-18T12:00:00.000Z"
+  },
+  {
+    "username": "someone",
+    "password": "$2a$10$s2p1MWKdkLv0ht9XQMySmuU.sMwaUeQzFXvrNWEHTbzpIMIyjuP26",
+    "premium": false,
+    "createdAt": "2026-10-19T05:35:09.390Z"
+  }
+]
